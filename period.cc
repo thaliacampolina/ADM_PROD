@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-#define FIELDS (1+4+3+1)
+#define FIELDS (1+4+3+1+5 +1)
 #define TAB "\t"
 
 class Period{
@@ -22,6 +22,12 @@ class Period{
         int stock_delay;
         float stock_mean;
 
+        float cost_normal;
+        float cost_extra_shift;
+        float cost_subcontraction;
+        float cost_stock;
+        float cost_delay;
+
         // functions
         Period(){
             demand = 0;
@@ -35,6 +41,12 @@ class Period{
             stock_final = 0;
             stock_delay = 0;
             stock_mean = 0.0;
+ 
+            cost_normal = 0.0;
+            cost_extra_shift = 0.0;
+            cost_subcontraction = 0.0;
+            cost_stock = 0.0;
+            cost_delay = 0.0;
         }
 
         ~Period(){}
@@ -71,11 +83,33 @@ class Period{
                 break;
 
                 case 7:
-                    cout << TAB <<stock_delay;
+                    cout << TAB <<stock_mean;
                 break;
 
                 case 8:
-                    cout << TAB <<stock_mean;
+                    cout << TAB <<stock_delay;
+                break;
+
+                // cost
+                case 9:
+                    cout << TAB << cost_normal;
+                break;
+                case 10:
+                    cout << TAB << cost_extra_shift;
+                break;
+                case 11:
+                    cout << TAB << cost_subcontraction;
+                break;
+                case 12:
+                    cout << TAB << cost_stock;
+                break;
+                case 13:
+                    cout << TAB << cost_delay;
+                break;
+
+                case 14:
+                    cout << TAB << (cost_normal+cost_extra_shift
+                                     +cost_subcontraction+cost_stock+cost_delay);
                 break;
             }
         }
@@ -92,10 +126,12 @@ class Period{
                 break;
 
                 case 2:
+                case 10:
                     cout << "Turno Extra";
                 break;
 
                 case 3:
+                case 11:
                     cout << "Subcontratação";
                 break;
 
@@ -109,15 +145,32 @@ class Period{
                 break;
 
                 case 6:
-                    cout << "Final"<< TAB;;
+                    cout << "Final"<< TAB;
                 break;
 
                 case 7:
-                    cout << "Média"<< TAB;;
+                    cout << "Média"<< TAB;
                 break;
 
                 case 8:
-                    cout << "Atrasos"<< TAB;;
+                    cout << "Atrasos"<< TAB;
+                break;
+
+                case 9:
+                    cout << endl << "Custos de Produção" << endl;
+                    cout << "Normal"<< TAB;
+                break;
+
+                case 12:
+                    cout << "Estoques";
+                break;
+
+                case 13:
+                    cout << "Atrasos" << TAB;
+                break;
+
+                case 14:
+                    cout << "Total R$ -->" ;
                 break;
             }
         }
