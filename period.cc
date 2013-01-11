@@ -12,66 +12,32 @@ class Period{
         // variables
         int demand;
 
-        //  0- prod_normal
-        //  1- extra_shift
-        //  2- sub_contracting
-        //  3- prod_demand
-        int prod[4];
+        int prod_normal;
+        int extra_shift;
+        int sub_contraction;
+        int prod_demand;
 
-        // 0- stock_initial
-        // 1- stock_final
-        // 2- stock_delay
-        int stock[3];
+        int stock_initial;
+        int stock_final;
+        int stock_delay;
         float stock_mean;
 
         // functions
         Period(){
-            setDemand(0);
-            for(int i =0; i < 4; ++i){
-                setProd(i, 0);
-            }
+            demand = 0;
 
-            for(int i=0; i<3; ++i){
-                setStock(i, 0);
-            }
+            prod_normal = 0;
+            extra_shift = 0;
+            sub_contraction = 0;
+            prod_demand = 0;
 
-            setStockMean(0.0);
+            stock_initial = 0;
+            stock_final = 0;
+            stock_delay = 0;
+            stock_mean = 0.0;
         }
 
         ~Period(){}
-
-        Period(int demand, int prod_normal, int extra_shift,
-                int sub_contract, int prod_demand, int stock_initial,
-                int stock_final, float stock_mean, int stock_delay
-                ){
-
-            setDemand(demand);
-            setProd(0, prod_normal);
-            setProd(1, extra_shift);
-            setProd(2, sub_contract);
-            setProd(3, prod_demand);
-
-            setStock(0, stock_initial);
-            setStock(1, stock_final);
-            setStockMean(stock_mean);
-            setStock(2, stock_delay);
-        }
-
-        void setDemand(int demand){
-            this->demand = demand;
-        }
-
-        void setProd(int offset, int value){
-            this->prod[offset] = value;
-        }
-
-        void setStock(int offset, int value){
-            this->stock[offset] = value;
-        }
-
-        void setStockMean(float stock_mean){
-            this->stock_mean = stock_mean;
-        }
 
         void print(int field){
             switch(field){
@@ -82,24 +48,35 @@ class Period{
 
                 // prod
                 case 1:
+                    cout << TAB << prod_normal;
+                break;
                 case 2:
+                    cout << TAB << extra_shift;
+                break;
+
                 case 3:
+                    cout << TAB << sub_contraction;
+                break;
+
                 case 4:
-                    cout << TAB << prod[field-1];
+                    cout << TAB << prod_demand;
                 break;
 
                 // stock
                 case 5:
+                    cout << TAB << stock_initial;
+                break;
                 case 6:
-                    cout << TAB << stock[field-5];
-                break;
-                case 7:
-                    cout << TAB << stock_mean;
-                break;
-                case 8:
-                    cout << TAB << stock[field-6];
+                    cout << TAB << stock_final;
                 break;
 
+                case 7:
+                    cout << TAB <<stock_delay;
+                break;
+
+                case 8:
+                    cout << TAB <<stock_mean;
+                break;
             }
         }
 
