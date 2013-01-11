@@ -150,7 +150,7 @@ void pprint(Period* matrix, int size){
     // printing period
     cout << "Período" << TAB;
     for(int i =0; i< size; i++){
-        cout << TAB << i ;
+        cout << TAB << i +1 ;
     }
     cout << endl;
 
