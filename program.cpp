@@ -14,15 +14,15 @@ int main() {
     int num_period;
     int num_normal_prod;
     float normal_prod_value;
-    int extra_shift;
+    bool extra_shift;
     int extra_shift_number;
     float extra_shift_value;
-    int subcontract;
+    bool subcontract;
     int subcontract_number;
     float subcontract_value;
-    int stock;
+    bool stock;
     float stock_value;
-    int delay;
+    bool delay;
     float delay_value;
 
     //each period
@@ -74,7 +74,7 @@ int main() {
     //each period
 
     cout << endl << "Digite a quantidade da _demanda_ por período: " << endl << endl;	
-    for (int i=1; i < num_period; i++ ) { 
+    for (int i=1; i =< num_period; i++ ) { 
         cout << "_Demanda_ no Período " << i <<" :";
         cin >> num_demand;
         demand_vector.push_back(num_demand);
@@ -82,9 +82,22 @@ int main() {
 //********************** END: MENU*********************//
 
 
-
-
     Period matrix[num_period];
+
+    // setting all demands
+    for(int i =0; i< num_period; ++i){
+        // demanda
+        matrix[i].setDemand(demand_vector[i]);
+
+        // producao normal
+        matrix[i].setProd(0, num_ normal_prod);
+    }
+
+    // iteracao para calcula dos produtos
+    for(int i =0; i< num_period; ++i){
+        
+    }
+
     pprint(matrix,num_period);
 
 
