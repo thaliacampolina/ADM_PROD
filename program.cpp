@@ -1,10 +1,14 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-
+#include "period.cc"
 
 
 int main() {
+
+
+
+//**********************MENU*********************//
 
     //global
     int num_period;
@@ -25,7 +29,6 @@ int main() {
     vector<int> demand_vector;
     int num_demand;
 
-//MENU
 
     //global
    
@@ -71,11 +74,18 @@ int main() {
     //each period
 
     cout << endl << "Digite a quantidade da _demanda_ por período: " << endl << endl;	
-    for (int i=0; i < num_period; i++ ) { 
+    for (int i=1; i < num_period; i++ ) { 
         cout << "_Demanda_ no Período " << i <<" :";
         cin >> num_demand;
         demand_vector.push_back(num_demand);
     }
+//********************** END: MENU*********************//
+
+
+
+
+    Period matrix[num_period];
+    pprint(matrix,num_period);
 
 
 }
