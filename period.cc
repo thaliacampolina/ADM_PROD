@@ -18,6 +18,9 @@ class Period{
         //  3- prod_demand
         int prod[4];
 
+        // 0- stock_initial
+        // 1- stock_final
+        // 2- stock_delay
         int stock[3];
         float stock_mean;
 
@@ -89,7 +92,7 @@ class Period{
                 case 5:
                 case 6:
                     cout << TAB << stock[field-5];
-                break; 
+                break;
                 case 7:
                     cout << TAB << stock_mean;
                 break;
