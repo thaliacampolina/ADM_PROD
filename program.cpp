@@ -19,23 +19,23 @@ int main() {
 //**********************MENU*********************//
 
     //global
-    int num_period;
-    int num_normal_prod;
-    float normal_prod_value;
-    int extra_shift;
-    int extra_shift_number;
-    float extra_shift_value;
-    int subcontract;
-    int subcontract_number;
-    float subcontract_value;
-    int initial_stock;
-    float stock_value;
-    int delay;
-    float delay_value;
+    int num_period=0;;
+    int num_normal_prod=0;;
+    float normal_prod_value=0.0;
+    int extra_shift=0;
+    int extra_shift_number=0;
+    float extra_shift_value=0.0;
+    int subcontract=0;
+    int subcontract_number=0;
+    float subcontract_value=0.0;
+    int initial_stock=0;
+    float stock_value=0.0;
+    int delay=0;
+    float delay_value=0.0;
 
     //each period
     vector<int> demand_vector;
-    int num_demand;
+    int num_demand=0;
 
 
     //global
@@ -87,36 +87,56 @@ int main() {
         cin >> num_demand;
         demand_vector.push_back(num_demand);
     }
-//********************** END: MENU*********************//
+
+//********************** CONTEXT *********************//
+
+    //creating element vector
+    Element element[3];
+
+    //setting context: DELAY, EXTRA SHIFT AND SUBCONTRACTION
+    element[0].setElement(DELAY,delay_value,delay,0);
+    element[1].setElement(SUBCONTRACTION,subcontract_value,subcontrat,subcontract_number);
+    element[2].setElement(EXTRA,extra_shift_value,extra_shift,extra_shift_number);
 
 
+
+
+
+    //creating period matrix
     Period matrix[num_period+1];
     matrix[0].stock_initial = initial_stock;
 
     // setting all demands
     for(int i =0; i< num_period; ++i){
-        // demanda
+        // demand
         matrix[i].demand = demand_vector[i];
 
-        // producao normal
+        // normal prod
         matrix[i].prod_normal =  num_normal_prod;
     }
 
-    // iteracoes
+
+
+//********************** ITERATION*********************//
+
+    // iteration
     for(int i =0; i< num_period; ++i){
 
         int demand = matrix[i].demand;
         int prod_normal = matrix[i].prod_normal;
         int stock_initial = matrix[i].stock_initial;
 
+        // real demand
+        // is only the demand on 1st period
         int real_demand = 0;
         if( i == 0){
             real_demand = demand;
         }
+        // it is the demand + the delay stock, if it exist
         else{
             real_demand = demand + matrix[i-1].stock_delay;
         }
-
+        // if the demand can be produced
         if( real_demand < (prod_normal + stock_initial)){
             matrix[i].prod_demand = prod_normal - real_demand;
             int stock_final = (prod_normal + stock_initial) - real_demand;
@@ -124,7 +144,9 @@ int main() {
             matrix[i].stock_mean = ( stock_initial + stock_final) / 2.0;
             matrix[i+1].stock_initial = stock_final;
         }
+        // if the demand can not be produced
         else{
+            // calculates the delayed number of product
             int delay_2_remove = real_demand - prod_normal - stock_initial;
 
             if( extra_shift & subcontract){
@@ -146,6 +168,7 @@ int main() {
                         }
                     }
                 }
+//TODO: REPLACE
                 else{ //subcontract
                     int removed = use_extra(delay_2_remove, subcontract_number);
                     matrix[i].sub_contraction = removed;
@@ -165,7 +188,7 @@ int main() {
             }
         }
 
-        // custos
+        // costs
         matrix[i].cost_normal = normal_prod_value * num_normal_prod;
         matrix[i].cost_extra_shift = matrix[i].extra_shift * extra_shift_value;
         matrix[i].cost_subcontraction =  matrix[i].sub_contraction * subcontract_value;
@@ -173,6 +196,7 @@ int main() {
         matrix[i].cost_delay = matrix[i].stock_delay * delay_value;
     }
 
+    //dump the table on screen
     pprint(matrix,num_period);
 
 
