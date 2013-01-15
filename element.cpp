@@ -13,6 +13,11 @@ class Element {
         bool flag;
         //maximum number of elements
         int max;         
+
+        void setElement(int id, float cost, bool flag, int max);
+        Element();
+        ~Element();
+
 };
 
 Element::Element() {
@@ -24,7 +29,7 @@ Element::Element() {
 
 Element::~Element() {}
 
-Element::setElement(int id, float cost, bool flag, int max) {
+void Element::setElement(int id, float cost, bool flag, int max) {
     this->id=id;
     this->cost=cost;
     this->flag=flag;

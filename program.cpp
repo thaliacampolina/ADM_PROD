@@ -1,7 +1,10 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 using namespace std;
+
 #include "period.cc"
+#include "element.cpp"
 
 int use_extra( int a, int b){
     if(a <= b){
@@ -74,8 +77,10 @@ int main() {
 
     cout << "Digite 1 se houver possibilidade de ter _atrasos_, 0 caso contrario: ";	
     cin >> delay;
-    cout << "Digite o valor (custo) por unidade dos _atrasos_  (utilize ponto ao invés de vírgula): ";	
-    cin >> delay_value;
+    if(delay){
+        cout << "Digite o valor (custo) por unidade dos _atrasos_  (utilize ponto ao invés de vírgula): ";	
+        cin >> delay_value;
+    }
 
 
 
@@ -95,11 +100,13 @@ int main() {
 
     //setting context: DELAY, EXTRA SHIFT AND SUBCONTRACTION
     element[0].setElement(DELAY,delay_value,delay,0);
-    element[1].setElement(SUBCONTRACTION,subcontract_value,subcontrat,subcontract_number);
+    element[1].setElement(SUBCONTRACTION,subcontract_value,subcontract,subcontract_number);
     element[2].setElement(EXTRA,extra_shift_value,extra_shift,extra_shift_number);
 
 
+    sort(element, element+3, compare); 
 
+    cout<<element[0].id<<" "<<element[1].id<<" "<<element[2].id<<endl;
 
 
     //creating period matrix
