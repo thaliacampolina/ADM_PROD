@@ -6,14 +6,6 @@ using namespace std;
 #include "period.cc"
 #include "element.cpp"
 
-int use_extra( int a, int b){
-    if(a <= b){
-        return a;
-    }
-    else{
-        return b;
-    }
-}
 
 int main() {
 
@@ -104,10 +96,9 @@ int main() {
     element[2].setElement(EXTRA,extra_shift_value,extra_shift,extra_shift_number);
 
 
+    //sort
     sort(element, element+3, compare); 
-
-    cout<<element[0].id<<" "<<element[1].id<<" "<<element[2].id<<endl;
-
+    cout<<"elements"<<element[0].id<<" "<<element[1].id<<" "<<element[2].id<<endl;
 
     //creating period matrix
     Period matrix[num_period+1];
@@ -121,7 +112,6 @@ int main() {
         // normal prod
         matrix[i].prod_normal =  num_normal_prod;
     }
-
 
 
 //********************** ITERATION*********************//
@@ -143,6 +133,8 @@ int main() {
         else{
             real_demand = demand + matrix[i-1].stock_delay;
         }
+
+//PRODUCING THE DEMAND
         // if the demand can be produced
         if( real_demand < (prod_normal + stock_initial)){
             matrix[i].prod_demand = prod_normal - real_demand;
@@ -151,44 +143,71 @@ int main() {
             matrix[i].stock_mean = ( stock_initial + stock_final) / 2.0;
             matrix[i+1].stock_initial = stock_final;
         }
+
         // if the demand can not be produced
+//TODO: REPLACE
         else{
             // calculates the delayed number of product
-            int delay_2_remove = real_demand - prod_normal - stock_initial;
+            int delay_to_remove = real_demand - prod_normal - stock_initial;
 
-            if( extra_shift & subcontract){
+
+        for(int j = 0; (j < 3) && (delay_to_remove!=0); j++){
+            switch (element[j].id){
+//TODO:DELAY -> ver se a flag ta ligada, se nao tiver passar o delay pros periodos anteriores
+                
+                case DELAY:{
+                    matrix[i].stock_delay = delay_to_remove;
+                    delay_to_remove = 0;
+                    break; }
+                case SUBCONTRACTION:{
+                    int to_produce = min(delay_to_remove, subcontract_number);
+                    matrix[i].sub_contraction = to_produce; 
+                    delay_to_remove -= to_produce;
+                    break;}
+                case EXTRA:{
+                    int to_produce = min(delay_to_remove, extra_shift_number);
+                    matrix[i].extra_shift = to_produce; 
+                    delay_to_remove -= to_produce;
+                break;}
+                default:
+                    cerr<<"erro seu lesado"<<endl;
+            }
+        }
+
+
+//TODO: REMOVE THESE LINES
+            if(extra_shift & subcontract){
                 // extra shift
                 if( extra_shift_value < subcontract_value){
 
-                    int removed = use_extra(delay_2_remove, extra_shift_number);
+                    int removed = min(delay_to_remove, extra_shift_number);
                     matrix[i].extra_shift = removed;
-                    delay_2_remove -= removed;
+                    delay_to_remove -= removed;
 
-                    if(delay_2_remove > 0){
+                    if(delay_to_remove > 0){
 
-                        removed = use_extra(delay_2_remove, subcontract_number);
+                        removed = min(delay_to_remove, subcontract_number);
                         matrix[i].sub_contraction = removed;
-                        delay_2_remove -= removed;
+                        delay_to_remove -= removed;
 
-                        if(delay_2_remove > 0){
-                            matrix[i].stock_delay = delay_2_remove;
+                        if(delay_to_remove > 0){
+                            matrix[i].stock_delay = delay_to_remove;
                         }
                     }
                 }
-//TODO: REPLACE
                 else{ //subcontract
-                    int removed = use_extra(delay_2_remove, subcontract_number);
+                    int removed = min(delay_to_remove, subcontract_number);
                     matrix[i].sub_contraction = removed;
-                    delay_2_remove -= removed;
+                    delay_to_remove -= removed;
 
-                    if(delay_2_remove > 0){
+                    if(delay_to_remove > 0){
 
-                        removed = use_extra(delay_2_remove, extra_shift_number);
+                        removed = min(delay_to_remove, extra_shift_number);
                         matrix[i].extra_shift = removed;
-                        delay_2_remove -= removed;
+                        delay_to_remove -= removed;
 
-                        if(delay_2_remove > 0){
-                            matrix[i].stock_delay = delay_2_remove;
+                        if(delay_to_remove > 0){
+                            matrix[i].stock_delay = delay_to_remove;
                         }
                     }
                 }
