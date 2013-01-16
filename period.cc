@@ -51,65 +51,80 @@ class Period{
 
         ~Period(){}
 
-        void print(int field){
+        float print(int field){
             switch(field){
                 // demand
                 case 0:
                     cout << TAB << demand;
+                    return demand;
                 break;
 
                 // prod
                 case 1:
                     cout << TAB << prod_normal;
+                    return prod_normal;
                 break;
                 case 2:
                     cout << TAB << extra_shift;
+                    return extra_shift;
                 break;
 
                 case 3:
                     cout << TAB << sub_contraction;
+                    return sub_contraction;
                 break;
 
                 case 4:
                     cout << TAB << prod_demand;
+                    return prod_demand;
                 break;
 
                 // stock
                 case 5:
                     cout << TAB << stock_initial;
+                    return stock_initial;
                 break;
                 case 6:
                     cout << TAB << stock_final;
+                    return stock_final;
                 break;
 
                 case 7:
                     cout << TAB <<stock_mean;
+                    return stock_mean;
                 break;
 
                 case 8:
                     cout << TAB <<stock_delay;
+                    return stock_delay;
                 break;
 
                 // cost
                 case 9:
                     cout << TAB << cost_normal;
+                    return cost_normal;
                 break;
                 case 10:
                     cout << TAB << cost_extra_shift;
+                    return cost_extra_shift;
                 break;
                 case 11:
                     cout << TAB << cost_subcontraction;
+                    return cost_subcontraction;
                 break;
                 case 12:
                     cout << TAB << cost_stock;
+                    return cost_stock;
                 break;
                 case 13:
                     cout << TAB << cost_delay;
+                    return cost_delay;
                 break;
 
                 case 14:
                     cout << TAB << (cost_normal+cost_extra_shift
                                      +cost_subcontraction+cost_stock+cost_delay);
+                    return (cost_normal+cost_extra_shift +cost_subcontraction+cost_stock+cost_delay);
                 break;
             }
         }
@@ -182,14 +197,18 @@ void pprint(Period* matrix, int size){
     for(int i =0; i< size; i++){
         cout << TAB << i +1 ;
     }
+    cout << TAB  << "Total";
     cout << endl;
 
     // printing table
     for(int i=0; i< FIELDS; ++i){
         matrix[0].printHeader(i);
+        float total = 0.0;
         for(int j=0; j< size; j++){
-            matrix[j].print(i);
+            total += matrix[j].print(i);
         }
+        // imprime o total referente ao iéssimo campo
+        cout << TAB << total;
         cout << endl;
     }
 };
