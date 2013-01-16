@@ -116,8 +116,8 @@ int main() {
 
 //********************** ITERATION*********************//
 
-    // iteration
-    for(int i =0; i< num_period; ++i){
+    // iteration : periods
+    for(int i =0; i< num_period; ++i) {
 
         int demand = matrix[i].demand;
         int prod_normal = matrix[i].prod_normal;
@@ -134,85 +134,49 @@ int main() {
             real_demand = demand + matrix[i-1].stock_delay;
         }
 
-//PRODUCING THE DEMAND
+//******************PRODUCING THE DEMAND*************//
         // if the demand can be produced
         if( real_demand < (prod_normal + stock_initial)){
-            matrix[i].prod_demand = prod_normal - real_demand;
             int stock_final = (prod_normal + stock_initial) - real_demand;
             matrix[i].stock_final = stock_final;
-            matrix[i].stock_mean = ( stock_initial + stock_final) / 2.0;
+            //calculates the initial stock for the next period
             matrix[i+1].stock_initial = stock_final;
         }
 
         // if the demand can not be produced
-//TODO: REPLACE
         else{
             // calculates the delayed number of product
             int delay_to_remove = real_demand - prod_normal - stock_initial;
 
 
-        for(int j = 0; (j < 3) && (delay_to_remove!=0); j++){
-            switch (element[j].id){
+            for(int j = 0; (j < 3) && (delay_to_remove!=0); j++){
+                switch (element[j].id){
 //TODO:DELAY -> ver se a flag ta ligada, se nao tiver passar o delay pros periodos anteriores
                 
-                case DELAY:{
-                    matrix[i].stock_delay = delay_to_remove;
-                    delay_to_remove = 0;
-                    break; }
-                case SUBCONTRACTION:{
-                    int to_produce = min(delay_to_remove, subcontract_number);
-                    matrix[i].sub_contraction = to_produce; 
-                    delay_to_remove -= to_produce;
+                //
+                    case DELAY:{
+                        matrix[i].stock_delay = delay_to_remove;
+                        matrix[i+1].stock_initial = -delay_to_remove;
+                        delay_to_remove = 0;
+                        break; }
+                    case SUBCONTRACTION:{
+                        int to_produce = min(delay_to_remove, subcontract_number);
+                        matrix[i].sub_contraction = to_produce; 
+                        delay_to_remove -= to_produce;
+                        break;}
+                    case EXTRA:{
+                        int to_produce = min(delay_to_remove, extra_shift_number);
+                        matrix[i].extra_shift = to_produce; 
+                        delay_to_remove -= to_produce;
                     break;}
-                case EXTRA:{
-                    int to_produce = min(delay_to_remove, extra_shift_number);
-                    matrix[i].extra_shift = to_produce; 
-                    delay_to_remove -= to_produce;
-                break;}
-                default:
-                    cerr<<"erro seu lesado"<<endl;
-            }
-        }
-
-
-//TODO: REMOVE THESE LINES
-            if(extra_shift & subcontract){
-                // extra shift
-                if( extra_shift_value < subcontract_value){
-
-                    int removed = min(delay_to_remove, extra_shift_number);
-                    matrix[i].extra_shift = removed;
-                    delay_to_remove -= removed;
-
-                    if(delay_to_remove > 0){
-
-                        removed = min(delay_to_remove, subcontract_number);
-                        matrix[i].sub_contraction = removed;
-                        delay_to_remove -= removed;
-
-                        if(delay_to_remove > 0){
-                            matrix[i].stock_delay = delay_to_remove;
-                        }
-                    }
-                }
-                else{ //subcontract
-                    int removed = min(delay_to_remove, subcontract_number);
-                    matrix[i].sub_contraction = removed;
-                    delay_to_remove -= removed;
-
-                    if(delay_to_remove > 0){
-
-                        removed = min(delay_to_remove, extra_shift_number);
-                        matrix[i].extra_shift = removed;
-                        delay_to_remove -= removed;
-
-                        if(delay_to_remove > 0){
-                            matrix[i].stock_delay = delay_to_remove;
-                        }
-                    }
+                    default:
+                        cerr<<"erro seu lesado"<<endl;
                 }
             }
+
         }
+
+        //general info for each period
 
         // costs
         matrix[i].cost_normal = normal_prod_value * num_normal_prod;
@@ -220,6 +184,12 @@ int main() {
         matrix[i].cost_subcontraction =  matrix[i].sub_contraction * subcontract_value;
         matrix[i].cost_stock = matrix[i].stock_mean * stock_value;
         matrix[i].cost_delay = matrix[i].stock_delay * delay_value;
+        
+
+        //prod - demand
+        matrix[i].prod_demand = prod_normal - real_demand;
+        //stock mean
+        matrix[i].stock_mean = ( stock_initial + stock_final) / 2.0;
     }
 
     //dump the table on screen
