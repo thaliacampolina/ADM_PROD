@@ -96,6 +96,12 @@ int main() {
     element[2].setElement(EXTRA,extra_shift_value,extra_shift,extra_shift_number);
 
 
+    //setting delay flag
+    if (delay == 1) {
+        element[0].flag = true;
+    }
+
+
     //sort
     sort(element, element+3, compare); 
     cout<<"elements"<<element[0].id<<" "<<element[1].id<<" "<<element[2].id<<endl;
