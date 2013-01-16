@@ -157,6 +157,7 @@ int main() {
                     case DELAY:{
                         matrix[i].stock_delay = delay_to_remove;
                         matrix[i+1].stock_initial = -delay_to_remove;
+                        matrix[i].stock_final = -delay_to_remove;
                         delay_to_remove = 0;
                         break; }
                     case SUBCONTRACTION:{
@@ -173,7 +174,6 @@ int main() {
                         cerr<<"erro seu lesado"<<endl;
                 }
             }
-
         }
 
         //general info for each period
@@ -189,7 +189,7 @@ int main() {
         //prod - demand
         matrix[i].prod_demand = prod_normal - real_demand;
         //stock mean
-        matrix[i].stock_mean = ( stock_initial + stock_final) / 2.0;
+        matrix[i].stock_mean = ( stock_initial + matrix[i].stock_final) / 2.0;
     }
 
     //dump the table on screen

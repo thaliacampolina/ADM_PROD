@@ -6,7 +6,7 @@ RM = rm -f
 
 OBJS = program.o
 
-MAIN = mnp
+MAIN = mpp
 
 $(MAIN): $(OBJS)
 	@echo ""
