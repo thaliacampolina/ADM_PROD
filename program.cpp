@@ -141,6 +141,12 @@ int main() {
         }
 
 //******************PRODUCING THE DEMAND*************//
+
+        // thalesfc: convert the stock to zero if it is negative
+        if(stock_initial < 0){
+            stock_initial = 0;
+        }
+
         // if the demand can be produced
         if( real_demand < (prod_normal + stock_initial)){
             int stock_final = (prod_normal + stock_initial) - real_demand;
